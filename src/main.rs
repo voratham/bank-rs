@@ -13,6 +13,21 @@ impl Account {
             balance: 0,
         }
     }
+
+    fn summary(&self) -> String {
+        // marco format! command
+        format!("{} has a balance {}", self.holder, self.balance)
+    }
+
+    fn deposit(&mut self, amount: i32) -> i32 {
+        self.balance += amount;
+        self.balance
+    }
+
+    fn withdraw(&mut self, amount: i32) -> i32 {
+        self.balance -= amount;
+        self.balance
+    }
 }
 
 #[derive(Debug)]
@@ -24,53 +39,37 @@ impl Bank {
     fn new() -> Self {
         Bank { accounts: vec![] }
     }
+    fn add_account(&mut self, account: Account) {
+        self.accounts.push(account)
+    }
+
+    fn total_balance(&self) -> i32 {
+        self.accounts.iter().map(|account| account.balance).sum()
+    }
+
+    fn summary(&self) -> Vec<String> {
+        self.accounts
+        .iter()
+        .map(|account| account.summary())
+        .collect::<Vec<String>>()
+    }
+
+    
 }
 
-fn print_holder(holder: String) {
-    println!("{}", holder)
+fn main() {
+    let mut bank = Bank::new();
+
+    let mut account = Account::new(1, String::from("voratham"));
+
+    account.deposit(500);
+    account.withdraw(250);
+
+    println!("🔍 {}", account.summary());
+
+    bank.add_account(account);
+
+    println!("✅ all accounts summary {:#?}", bank.summary());
+    println!("✅ all total balance of bank {}", bank.total_balance());
+    
 }
-
-fn print_account(account: &Account) {
-    println!("{:#?}", account);
-}
-
-fn change_account(account: &mut Account) {
-    account.balance = 10;
-    println!("change_account print {}", account.holder);
-}
-
-// fn main() {
-//     let mut account = Account::new(1, String::from("Voratham"));
-
-//     let account_ref = &mut account;
-
-//     account.balance = 10;
-
-//     change_account(account_ref);
-
-//     println!("{:#?}", account)
-// }
-
-fn set_account_id(account: &mut Account, id: u32) { // Line 1
-    account.id = id;
-}
- 
-// fn main() {
-// let  account = Account::new(1, String::from("me"));    
-// let  other_account = account;
-// println!("{:#?}", account)
-//     let num = 5;
-//     let other_num = num;
-//     println!("{} , {}", num , other_num)
-// }
-
-
-
-// fn main() {
-//     let id = 1;
-//     let holder = String::from("me");
- 
-//     let account = Account::new(id, holder);
- 
-//     println!("{:#?} {:#?}", id, holder);
-// }
